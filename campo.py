@@ -48,7 +48,7 @@ class Campo:
         self.numerar_bombas_vizinhas()
 
     def cavar(self, y, x, cavadas):
-        print(f"funcao cavar na casa: {y}, {x}")
+#        print(f"funcao cavar na casa: {y}, {x}")
         if self.matriz_foi_cavada[y][x]: #verifica se a casa já foi cavada (nesse caso aqui ela foi)
             print(self.matriz_verificacao)
             if (
@@ -57,7 +57,7 @@ class Campo:
                 and self.matriz_verificacao[y][x]
             ):
                 bombas_marcadas_ao_redor = self.contar_bombas_vizinhas(y, x, "x")
-                print(bombas_marcadas_ao_redor)
+#                print(bombas_marcadas_ao_redor)
                 if int(self.campo_de_jogo[y][x]) == bombas_marcadas_ao_redor:
                     self.matriz_verificacao[y][x] = False
                     for lin in range(y - 1, y + 2):
