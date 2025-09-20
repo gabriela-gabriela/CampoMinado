@@ -14,9 +14,9 @@ def vitoria():
 def play():
     c = campo.Campo(5, 5, 5)
     c.criar_campos()
-    for lin in range(len(c.campo_minado)):
-        print(c.campo_minado[lin])
-    print(" ")
+#    for lin in range(len(c.campo_minado)):
+#        print(c.campo_minado[lin])
+#    print(" ")
 
     casas_vazias = (c.altura * c.largura) - c.n_bombas
     while True:
@@ -37,7 +37,7 @@ def play():
                     return game_over()
 
                 casas_vazias -= casas_cavadas
-                print(f"casas que supostamente faltam cavar: {casas_vazias}")
+#                print(f"casas que supostamente faltam cavar: {casas_vazias}")
 
                 if casas_vazias == 0:
                     return vitoria()
