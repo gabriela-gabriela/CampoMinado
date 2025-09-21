@@ -47,52 +47,62 @@ class Campo:
         self.plantar_bombas()
         self.numerar_bombas_vizinhas()
 
-    def cavar(self, y, x, cavadas):
-#        print(f"funcao cavar na casa: {y}, {x}")
-        if self.matriz_foi_cavada[y][x]: #verifica se a casa já foi cavada (nesse caso aqui ela foi)
-            print(self.matriz_verificacao)
-            if (
-                self.campo_de_jogo[y][x].isdigit()
-                and 0 < int(self.campo_de_jogo[y][x]) < 9
-                and self.matriz_verificacao[y][x]
+    def cavar(self, y, x):
+        cavadas = 0
+        if self.matriz_foi_cavada[y][x]:
+            cavadas = self.cavar_por_numero(y, x, cavadas)
+
+        else:
+            cavadas = self.cavar_nao_cavadas(y, x, cavadas)
+
+        return cavadas
+
+    def cavar_nao_cavadas(self, y, x, cavadas):
+        if self.matriz_foi_cavada[y][x]:
+            return 0
+
+        if self.campo_de_jogo[y][x] == "x": # vc fica impedido de cavar uma loc marcada
+            return 0
+
+        if self.campo_minado[y][x] == "*":
+            return "gameover"
+
+        elif self.campo_minado[y][x] == "0":
+            self.campo_de_jogo[y][x] = " "
+            self.matriz_foi_cavada[y][x] = True
+            cavadas += 1
+            for lin in range(y - 1, y + 2):
+                if 0 <= lin < self.altura:
+                    for col in range(x - 1, x + 2):
+                        if 0 <= col < self.largura and (x, y) != (col, lin):
+                            cavadas += self.cavar_nao_cavadas(lin, col, 0)
+
+        else:
+            self.campo_de_jogo[y][x] = self.campo_minado[y][x]
+            self.matriz_foi_cavada[y][x] = True
+            cavadas = 1
+
+        return cavadas
+
+    def cavar_por_numero(self, y, x, cavadas):
+        if (
+            self.campo_de_jogo[y][x].isdigit()
+            and 0 < int(self.campo_de_jogo[y][x]) < 9
+            and self.matriz_verificacao[y][x]
             ):
-                bombas_marcadas_ao_redor = self.contar_bombas_vizinhas(y, x, "x")
-#                print(bombas_marcadas_ao_redor)
-                if int(self.campo_de_jogo[y][x]) == bombas_marcadas_ao_redor:
-                    self.matriz_verificacao[y][x] = False
-                    for lin in range(y - 1, y + 2):
-                        if 0 <= lin < self.altura:
-                            for col in range(x - 1, x + 2):
-                                if 0 <= col < self.largura:
-                                    resultado = self.cavar(lin, col, 0)
-                                    if resultado == "gameover":
-                                        return "gameover" #se eu colocar a funcao de game over aqui ou criar um novo arquivo pra ela eu acho q fica melhor
-                                    cavadas += resultado
-
-        else: #se a casa ainda não tiver sido cavada
-            if self.campo_de_jogo[y][x] == "x": # vc fica impedido de cavar uma loc marcada
-                return 0
-
-            if self.campo_minado[y][x] == "*":
-                return "gameover"
-
-            elif self.campo_minado[y][x] == "0":
-                self.campo_de_jogo[y][x] = " "
-                self.matriz_foi_cavada[y][x] = True
-                cavadas += 1
+            bombas_marcadas_ao_redor = self.contar_bombas_vizinhas(y, x, "x")
+            if int(self.campo_de_jogo[y][x]) == bombas_marcadas_ao_redor:
+                self.matriz_verificacao[y][x] = False
                 for lin in range(y - 1, y + 2):
                     if 0 <= lin < self.altura:
                         for col in range(x - 1, x + 2):
-                            if 0 <= col < self.largura and (x, y) != (col, lin):
-                                cavadas += self.cavar(lin, col, 0)
+                            if 0 <= col < self.largura:
+                                resultado = self.cavar_nao_cavadas(lin, col, 0)
+                                if resultado == "gameover":
+                                    return "gameover" #se eu colocar a funcao de game over aqui ou criar um novo arquivo pra ela eu acho q fica melhor
+                                cavadas += resultado
+            return cavadas
 
-            else:
-                self.campo_de_jogo[y][x] = self.campo_minado[y][x]
-                self.matriz_foi_cavada[y][x] = True
-                cavadas = 1
-
-#        print(f"cavadas: {cavadas}")
-        return cavadas
 
     def marcar_bomba(
         self, y, x
