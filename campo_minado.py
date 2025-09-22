@@ -38,6 +38,7 @@ def main(stdscr):
             break
 
         jogo = campo.Campo(altura, largura, bombas)
+        jogo.criar_campos()
         janela_jogo = tela.criar_janela(altura, largura, jogo.campo_de_jogo)
         cursor_y, cursor_x = 1, 1 #posicoes do "cursor" que vai facilitar o jogo
         tela.atualizar_janela(janela_jogo, cursor_y, cursor_x, jogo.campo_de_jogo)
@@ -66,11 +67,11 @@ def main(stdscr):
             elif tecla == ord("c"):
                 casas_cavadas = jogo.cavar(cursor_y - 1, cursor_x - 1)
                 if casas_cavadas == "gameover":
-                    return tela.game_over()
-
+                    tela.game_over()
+                    
                 casas_vazias -= casas_cavadas
                 if casas_vazias == 0:
-                    return tela.vitoria()
+                    tela.vitoria()
 
             elif tecla == ord("m"):
                 jogo.marcar_bomba(cursor_y - 1, cursor_x - 1)
