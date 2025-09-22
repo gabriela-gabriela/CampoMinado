@@ -1,55 +1,80 @@
 import campo
+import interface
+import curses
+from curses import wrapper
 
 
-def game_over():
-    print("voce perdeu")
-    print("veja as localizações das bombas abaixo")
-    # print(c.campo_minado) tenho q ver um jeito de fazer a variavel de la passar pra ca (talvez seja uma boa criar uma classe pra aqui)
+#refazendo tudo:
+def main(stdscr):
+    stdscr = curses.initscr()
+    tela = interface.Interface(stdscr)
+    # apresentar uma animação para o jogador assim que ele abre o programa
 
-
-def vitoria():
-    print("parabéns, você venceu")
-
-
-def play():
-    c = campo.Campo(5, 5, 5)
-    c.criar_campos()
-#    for lin in range(len(c.campo_minado)):
-#        print(c.campo_minado[lin])
-#    print(" ")
-
-    casas_vazias = (c.altura * c.largura) - c.n_bombas
+    # mostrando o menu para o jogador com as opcoes:
     while True:
-        for lin in range(len(c.campo_de_jogo)):
-            print(c.campo_de_jogo[lin])
+        opcao_escolhida = tela.menu(stdscr)
+        if opcao_escolhida == "Fácil":
+            altura = 8
+            largura = 10
+            bombas = 10
 
+        elif opcao_escolhida == "Médio":
+            altura = 14
+            largura = 18
+            bombas = 40
+
+        elif opcao_escolhida == "Difícil":
+            altura = 20
+            largura = 24
+            bombas = 40
+
+        elif opcao_escolhida == "Ajuda e Créditos":
+            stdscr.clear()
+            ajudacreditos = "em andamento, feito por Gabriela e Lara"
+            stdscr.addstr(curses.LINES // 2 - len(ajudacreditos) // 2, curses.COLS // 2)
+            stdscr.refresh()
+            #colocar algo pra sair daqui
+
+        elif opcao_escolhida == "Sair":
+            break
+
+        jogo = campo.Campo(altura, largura, bombas)
+        janela_jogo = tela.criar_janela(altura, largura, jogo.campo_de_jogo)
+        cursor_y, cursor_x = 1, 1 #posicoes do "cursor" que vai facilitar o jogo
+        atualizar_janela(janela_jogo, cursor_y, cursor_x)
+
+        #fazer uma primeira jogada separado que cava 0 obrigatoriamente
+
+
+        casas_vazias = altura * largura - bombas
         while True:
-            tipo_jogada = input("cavar(c) ou marcar(m)? ")
-            if tipo_jogada == "c":
-                jogada_lin, jogada_col = input("jogada? '{linha} {coluna}' ").split() #tem q fazer um try except aqui
+            atualizar_janela(janela_jogo, cursor_y, cursor_x)
 
-                if c.campo_minado[int(jogada_lin)][int(jogada_col)] == "*":
-                    return game_over()
+            tecla = janela.getch()
 
-                casas_cavadas = c.cavar(int(jogada_lin), int(jogada_col), 0)
+            if tecla == ord("q"):
+                 break
 
+            elif tecla == curses.KEY_DOWN and cursor_y < altura:
+                cursor_y += 1
+            elif tecla == curses.KEY_UP and cursor_y > 1:
+                cursor_y -= 1
+            elif tecla == curses.KEY_LEFT and cursor_x > 1:
+                cursor_x -= 1
+            elif tecla == curses.KEY_RIGHT and cursor_y < largura:
+                cursor_x += 1
+
+            elif tecla == ord("c"):
+                casas_cavadas = jogo.cavar(cursor_y - 1, cursor_x - 1)
                 if casas_cavadas == "gameover":
-                    return game_over()
+                    return tela.gameover()
 
                 casas_vazias -= casas_cavadas
-#                print(f"casas que supostamente faltam cavar: {casas_vazias}")
-
                 if casas_vazias == 0:
-                    return vitoria()
-                break
+                    return tela.vitoria()
 
-            elif tipo_jogada == "m":
-                jogada_lin, jogada_col = input("jogada? '{linha} {coluna}' ").split()
-                c.marcar_bomba(int(jogada_lin), int(jogada_col))
-                break
-
-            else:
-                print("tipo de jogada inválido, tente novamente:")
+            elif tecla == ord("m"):
+                jogo.marcar_bomba(cursor_y - 1, cursor_x - 1)
 
 
-play()
+curses.wrapper(main)
