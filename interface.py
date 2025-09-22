@@ -38,24 +38,25 @@ class Interface:
                 return opcoes[opcao_escolhida]
 
     def criar_janela(self, altura, largura, campo_de_jogo):
-        altura_janela = altura + 4
-        largura_janela = largura + 4
+        # aumentando um pouco a altura e largura baseado no campo pra poder caber dentro da borda
+        altura_janela = altura + 2
+        largura_janela = largura + 2
         y_janela = (curses.LINES // 2) - (altura_janela // 2)
         x_janela = (curses.COLS // 2) - (largura_janela // 2)
         janela = curses.newwin(altura_janela, largura_janela, y_janela, x_janela)
-
-        janela.clear()
-        janela.border() #testar sem isso depois pra ver se fica mais bonito
+        janela.keypad(True)
 
         return janela
-
 
     def atualizar_janela(self, janela, cursor_y, cursor_x, campo_de_jogo):
         janela.clear()
         janela.border()
         for lin in range(len(campo_de_jogo)):
             for col in range(len(campo_de_jogo[lin])):
-                janela.addch(lin + 1, col + 1, campo_de_jogo[lin][col])
+                casa = campo_de_jogo[lin][col]
+                if casa == None:
+                    casa = "o"
+                janela.addch(lin + 1, col + 1, casa)
 
         janela.addch(cursor_y, cursor_x, "@", curses.A_REVERSE)
         janela.refresh()
