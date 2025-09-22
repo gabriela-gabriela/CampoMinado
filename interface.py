@@ -32,7 +32,9 @@ class Interface:
             elif tecla_clicada == curses.KEY_UP and opcao_escolhida > 0:
                 opcao_escolhida -= 1
 
-            elif tecla_clicada == curses.KEY_ENTER:
+            elif tecla_clicada in [curses.KEY_ENTER, 10, 13]:
+                self.stdscr.clear()
+                self.stdscr.refresh()
                 return opcoes[opcao_escolhida]
 
     def criar_janela(self, altura, largura, campo_de_jogo):
@@ -40,7 +42,7 @@ class Interface:
         largura_janela = largura + 4
         y_janela = (curses.LINES // 2) - (altura_janela // 2)
         x_janela = (curses.COLS // 2) - (largura_janela // 2)
-        janela = curses.newwin(altura, largura, y_janela, x_janela)
+        janela = curses.newwin(altura_janela, largura_janela, y_janela, x_janela)
 
         janela.clear()
         janela.border() #testar sem isso depois pra ver se fica mais bonito
@@ -48,11 +50,11 @@ class Interface:
         return janela
 
 
-    def atualizar_janela(self, janela, cursor_y, cursor_x):
+    def atualizar_janela(self, janela, cursor_y, cursor_x, campo_de_jogo):
         janela.clear()
         janela.border()
-        for lin in range(altura):
-            for col in range(largura):
+        for lin in range(len(campo_de_jogo)):
+            for col in range(len(campo_de_jogo[lin])):
                 janela.addch(lin + 1, col + 1, campo_de_jogo[lin][col])
 
         janela.addch(cursor_y, cursor_x, "@", curses.A_REVERSE)
@@ -69,7 +71,7 @@ class Interface:
         #mostra o "gabarito" do campo minado
         #opcao de voltar pra o menu
 
-    def vitoria():
+    def vitoria(self):
         self.stdscr.clear()
         self.stdscr.addstr(0, 0, "Voce ganhou")
         self.stdscr.refresh()
@@ -77,4 +79,3 @@ class Interface:
         #alguma animacaozinha de vitoria
         #voce ganhou na tela
         #opcao de voltar pra o menu
-  
