@@ -115,4 +115,4 @@ class Campo:
         elif self.campo_de_jogo[y][x] == "o":
             self.campo_de_jogo[y][x] = "x"
         else:
-            pass
+            print("opção inválida, tente novamente")
