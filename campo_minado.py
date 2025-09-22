@@ -6,7 +6,6 @@ from curses import wrapper
 
 #refazendo tudo:
 def main(stdscr):
-    stdscr = curses.initscr()
     tela = interface.Interface(stdscr)
     # apresentar uma animação para o jogador assim que ele abre o programa
 
@@ -41,16 +40,16 @@ def main(stdscr):
         jogo = campo.Campo(altura, largura, bombas)
         janela_jogo = tela.criar_janela(altura, largura, jogo.campo_de_jogo)
         cursor_y, cursor_x = 1, 1 #posicoes do "cursor" que vai facilitar o jogo
-        atualizar_janela(janela_jogo, cursor_y, cursor_x)
+        tela.atualizar_janela(janela_jogo, cursor_y, cursor_x, jogo.campo_de_jogo)
 
         #fazer uma primeira jogada separado que cava 0 obrigatoriamente
 
 
         casas_vazias = altura * largura - bombas
         while True:
-            atualizar_janela(janela_jogo, cursor_y, cursor_x)
+            tela.atualizar_janela(janela_jogo, cursor_y, cursor_x, jogo.campo_de_jogo)
 
-            tecla = janela.getch()
+            tecla = janela_jogo.getch()
 
             if tecla == ord("q"):
                  break
@@ -61,13 +60,13 @@ def main(stdscr):
                 cursor_y -= 1
             elif tecla == curses.KEY_LEFT and cursor_x > 1:
                 cursor_x -= 1
-            elif tecla == curses.KEY_RIGHT and cursor_y < largura:
+            elif tecla == curses.KEY_RIGHT and cursor_x < largura:
                 cursor_x += 1
 
             elif tecla == ord("c"):
                 casas_cavadas = jogo.cavar(cursor_y - 1, cursor_x - 1)
                 if casas_cavadas == "gameover":
-                    return tela.gameover()
+                    return tela.game_over()
 
                 casas_vazias -= casas_cavadas
                 if casas_vazias == 0:
