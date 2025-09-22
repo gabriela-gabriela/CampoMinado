@@ -22,6 +22,7 @@ class Campo:
                 bombas_plantadas += 1
 
     def contar_bombas_vizinhas(self, y, x, bomba=None):
+        # se a bomba for None ele vai contar as bombas reais ao redor, se for x, ele vai contar as bombas marcadas ao redor
         campo = self.campo_de_jogo
         if bomba == None:
             bomba = "*"
@@ -36,6 +37,7 @@ class Campo:
         return bombas_vizinhas
 
     def numerar_bombas_vizinhas(self):
+        # funcao para trocar os valores da matriz pelo numero de bombas ao redor
         for lin in range(self.altura):
             for col in range(self.largura):
                 if self.campo_minado[lin][col] != "*":
@@ -48,6 +50,7 @@ class Campo:
         self.numerar_bombas_vizinhas()
 
     def cavar(self, y, x):
+        # essa funcao aqui vai retornar o numero de casas cavadas ou "gameover" caso uma bomba seja cavada
         cavadas = 0
         if self.matriz_foi_cavada[y][x]:
             cavadas = self.cavar_por_numero(y, x, cavadas)
@@ -112,4 +115,4 @@ class Campo:
         elif self.campo_de_jogo[y][x] == "o":
             self.campo_de_jogo[y][x] = "x"
         else:
-            print("opção inválida, tente novamente")
+            pass
