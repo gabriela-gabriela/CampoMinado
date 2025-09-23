@@ -11,13 +11,13 @@ class Campo:
         self.matriz_verificacao = [[True for col in range(largura)] for lin in range(altura)] #matriz pra evitar que vire um loop infinito
         self.matriz_foi_cavada = [[False for col in range(largura)] for lin in range(altura)]
 
-    def plantar_bombas(self):
+    def plantar_bombas(self, y, x):
         bombas_plantadas = 0
         while bombas_plantadas < self.n_bombas:
             locx = random.randint(0, self.largura - 1)
             locy = random.randint(0, self.altura - 1)
 
-            if self.campo_minado[locy][locx] == None:
+            if self.campo_minado[locy][locx] == None and (locx, locy) not in [(x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)]: # esse list comprehension cria uma lista com os vizinhos de x, y
                 self.campo_minado[locy][locx] = "*"
                 bombas_plantadas += 1
 
@@ -45,8 +45,8 @@ class Campo:
                         self.contar_bombas_vizinhas(lin, col)
                     )
 
-    def criar_campos(self):
-        self.plantar_bombas()
+    def criar_campos(self, y, x):
+        self.plantar_bombas(y, x)
         self.numerar_bombas_vizinhas()
 
     def cavar(self, y, x):
