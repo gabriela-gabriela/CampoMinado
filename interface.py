@@ -61,12 +61,19 @@ class Interface:
         janela.addch(cursor_y, cursor_x, "@", curses.A_REVERSE)
         janela.refresh()
 
+    def ajuda_creditos(self):
+        self.stdscr.clear()
+        frase = "parte em andamento, feito por gabriela e lara"
+        self.stdscr.addstr(curses.LINES // 2, (curses.COLS - len(frase)) // 2, frase)
+        self.stdscr.refresh()
+        self.stdscr.getch()
+        return
 
     def game_over(self):
         self.stdscr.clear()
         self.stdscr.addstr(0, 0, "Voce perdeu")
         self.stdscr.refresh()
-
+        self.stdscr.getch()
         #animacao de explosao
         #voce perdeu na tela
         #mostra o "gabarito" do campo minado
@@ -76,6 +83,7 @@ class Interface:
         self.stdscr.clear()
         self.stdscr.addstr(0, 0, "Voce ganhou")
         self.stdscr.refresh()
+        self.stdscr.getch()
 
         #alguma animacaozinha de vitoria
         #voce ganhou na tela
