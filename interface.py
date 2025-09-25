@@ -153,8 +153,8 @@ class Interface:
                     self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_derrota[lin])) // 2) + col, " ")
                     rodape = "aperte qualquer tecla para voltar para o menu..."
                     self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
-                    self.stdscr.refresh()
-                    self.stdscr.getch()
+        self.stdscr.refresh()
+        self.stdscr.getch()
                     
     def vitoria(self):
         self.stdscr.clear()
@@ -178,5 +178,5 @@ class Interface:
                     self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_vitoria[lin])) // 2) + col, " ")
                     rodape = "aperte qualquer tecla para voltar para o menu..."
                     self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
-                    self.stdscr.refresh()
-                    self.stdscr.getch()
+        self.stdscr.refresh()
+        self.stdscr.getch()
