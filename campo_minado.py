@@ -60,7 +60,7 @@ def jogar(altura, largura, bombas, tela):
         elif tecla == ord("c"):
             casas_cavadas = jogo.cavar(cursor_y - 1, (cursor_x - 1) // 2)
             if casas_cavadas == "gameover":
-                tela.game_over()
+                tela.game_derrota()
                 break
 
             casas_vazias -= casas_cavadas
