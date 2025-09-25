@@ -133,24 +133,50 @@ class Interface:
         self.stdscr.getch()
 
 
-
-
-    def game_over(self):
+    def derrota(self):
         self.stdscr.clear()
-        self.stdscr.addstr(0, 0, "Voce perdeu")
-        self.stdscr.refresh()
-        self.stdscr.getch()
-        #animacao de explosao
-        #voce perdeu na tela
-        #mostra o "gabarito" do campo minado
-        #opcao de voltar pra o menu
-
+        m_derrota = [
+            [1,1,1,1,0,0,0,1,1,1,1,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,1,0,0,0],
+            [1,1,1,1,1,0,0,1,1,0,0,0,1,1,0,0,1,1,0,1,1,0,0,1,1,0,0,1,1,0,1,1,0,0,0,0,1,1,0,0,0,0,0,1,1,1,0,0],
+            [1,1,0,0,1,1,0,1,1,1,1,0,1,1,0,0,1,1,0,1,1,0,0,1,1,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0,1,1,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,1,1,0,1,1,0],
+            [1,1,1,1,1,0,0,1,1,0,0,0,1,1,0,0,1,1,0,1,1,0,0,1,1,0,0,1,1,0,1,1,0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1],
+            [1,1,1,1,0,0,0,1,1,1,1,0,1,1,0,0,1,1,0,1,1,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1]
+        ]
+        self.stdscr.clear()
+        for lin in range(len(m_derrota)):
+            for col in range(len(m_derrota[lin])):
+                p = m_derrota[lin][col]
+                if p == 1:
+                    self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_derrota[lin])) // 2) + col, " ", curses.A_REVERSE)
+                else:
+                    self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_derrota[lin])) // 2) + col, " ")
+                    rodape = "aperte qualquer tecla para voltar para o menu..."
+                    self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
+                    self.stdscr.refresh()
+                    self.stdscr.getch()
+                    
     def vitoria(self):
         self.stdscr.clear()
-        self.stdscr.addstr(0, 0, "Voce ganhou")
-        self.stdscr.refresh()
-        self.stdscr.getch()
-
-        #alguma animacaozinha de vitoria
-        #voce ganhou na tela
-        #opcao de voltar pra o menu
+        m_vitoria = [
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            [1,1,0,0,0,1,1,0,1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0,0,0,0,1,0,0,0],
+            [1,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0,0,0,0,1,1,0,1,1,0,0,1,1,0,0,1,1,0,1,1,0,0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,1,1,0,0,1,1,0,1,1,0,0,1,1,0,1,1,0],
+            [0,1,1,0,1,1,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,1,1,1,1,1,0,0,1,1,0,0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,1,1,0,1,1,0,0,1,1,0,0,1,1,0,1,1,0,1,1,1,1,1,1,1],
+            [0,0,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,1,1,1,0,0,0,1,1,0,0,1,1,0,1,1,0,1,1,0,0,0,1,1]
+        ]
+        self.stdscr.clear()
+        for lin in range(len(m_vitoria)):
+            for col in range(len(m_vitoria[lin])):
+                p = m_vitoria[lin][col]
+                if p == 1:
+                    self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_vitoria[lin])) // 2) + col, " ", curses.A_REVERSE)
+                else:
+                    self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_vitoria[lin])) // 2) + col, " ")
+                    rodape = "aperte qualquer tecla para voltar para o menu..."
+                    self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
+                    self.stdscr.refresh()
+                    self.stdscr.getch()
