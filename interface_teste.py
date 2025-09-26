@@ -37,7 +37,8 @@ class Interface:
                     janela_menu.addstr(y, x, opcoes[i])
                     janela_menu.attroff(curses.A_REVERSE)
                 else:
-                    janela_menu.addstr(y, x, opcoes[i]) self.stdscr.refresh()
+                    janela_menu.addstr(y, x, opcoes[i]) 
+            self.stdscr.refresh()
             tecla_clicada = janela_menu.getch()
             janela_menu.refresh()
 
@@ -77,7 +78,8 @@ class Interface:
                 elif casa == "1":
                     janela.addstr(lin + 1, col * 2 + 1, " 1", self.azul_preto)
                 elif casa == "2":
-                    janela.addstr(lin + 1, col * 2 + 1, " 2", self.verde_preto) else:
+                    janela.addstr(lin + 1, col * 2 + 1, " 2", self.verde_preto) 
+                else:
                     janela.addstr(lin + 1, col * 2 + 1, " " + casa, self.vermelho_preto)
 
         janela.addstr(cursor_y, cursor_x, "@@", curses.A_REVERSE)
@@ -117,7 +119,8 @@ class Interface:
             for col in range(len(m_campo[lin])):
                 p = m_campo[lin][col]
                 if p == 1:
-                    self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_campo[lin])) // 2) + col, " ", curses.A_REVERSE)else:
+                    self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_campo[lin])) // 2) + col, " ", curses.A_REVERSE)
+                else:
                     self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_campo[lin])) // 2) + col, " ")
 
         for lin in range(len(m_minado)):
@@ -156,7 +159,9 @@ class Interface:
                     rodape = "aperte qualquer tecla para voltar para o menu..."
                     self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
         self.stdscr.refresh()
-        self.stdscr.getch()def vitoria(self):
+        self.stdscr.getch()
+    
+    def vitoria(self):
         self.stdscr.clear()
         m_vitoria = [
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
