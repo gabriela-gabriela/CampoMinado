@@ -1,6 +1,6 @@
 import curses
 import time
-
+import random
 
 class Interface:
     def __init__(self, stdscr):
@@ -144,7 +144,14 @@ class Interface:
 
 
     def derrota(self):
-        self.stdscr.clear()
+        altura, largura = self.stdscr.getmaxyx()
+        tamanho = altura * largura
+        char = [" ", ".", ":", "^", "*", "x", "s", "S", "#", "$"]
+        b = [0] * (tamanho + largura + 1)
+
+        self.stdscr.nodelay(True)
+        self.stdscr.timeout(30)
+
         m_derrota = [
             [1,1,1,1,0,0,0,1,1,1,1,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,1,1,1,1,1,1,0,0,0,0,1,0,0,0],
             [1,1,1,1,1,0,0,1,1,0,0,0,1,1,0,0,1,1,0,1,1,0,0,1,1,0,0,1,1,0,1,1,0,0,0,0,1,1,0,0,0,0,0,1,1,1,0,0],
@@ -153,19 +160,36 @@ class Interface:
             [1,1,1,1,1,0,0,1,1,0,0,0,1,1,0,0,1,1,0,1,1,0,0,1,1,0,0,1,1,0,1,1,0,0,0,0,1,1,0,0,0,1,1,1,1,1,1,1],
             [1,1,1,1,0,0,0,1,1,1,1,0,1,1,0,0,1,1,0,1,1,0,0,1,1,0,0,0,1,1,1,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1]
         ]
-        self.stdscr.clear()
-        for lin in range(len(m_derrota)):
-            for col in range(len(m_derrota[lin])):
-                p = m_derrota[lin][col]
-                if p == 1:
-                    self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_derrota[lin])) // 2) + col, " ", curses.A_REVERSE)
-                else:
-                    self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_derrota[lin])) // 2) + col, " ")
 
-        rodape = "aperte qualquer tecla para voltar para o menu..."
-        self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
-        self.stdscr.refresh()
-        self.stdscr.getch()
+        while True:
+            for i in range(int(largura / 9)):
+                b[int((random.random() * largura) + largura * (altura - 1))] = 65
+
+            for i in range(tamanho):
+                b[i] = int((b[i] + b[i + 1] + b[i + largura] + b[i + largura + 1]) / 4)
+                color = (6 if b[i]>15 else (5 if b[i]>9 else (3 if b[i]>4 else 1)))
+
+                if i < tamanho - 1:
+                    y, x = int(i / largura), i % largura
+                    char_index = min(b[i], len(char) - 1)
+                    self.stdscr.addstr(y, x, char[char_index], curses.color_pair(color) | curses.A_BOLD)
+
+            for lin in range(len(m_derrota)):
+                for col in range(len(m_derrota[lin])):
+                    p = m_derrota[lin][col]
+                    y_texto = (altura // 2) - 7 + lin
+                    x_texto = ((largura - len(m_derrota[lin])) // 2) + col
+                    if p == 1:
+                        self.stdscr.addstr(y_texto, x_texto, " ", curses.A_REVERSE)
+            rodape = "aperte qualquer tecla para voltar para o menu..."
+            self.stdscr.addstr(altura - 3, (largura - len(rodape)) // 2, rodape, curses.A_REVERSE)
+
+            self.stdscr.refresh()
+            if self.stdscr.getch() != -1:
+                break
+
+        self.stdscr.nodelay(False)
+        self.stdscr.timeout(-1)
 
     def vitoria(self, tempo):
         self.stdscr.clear()
