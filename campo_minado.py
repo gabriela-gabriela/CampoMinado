@@ -13,7 +13,7 @@ def movimentar_cursor(tecla, cursor_y, cursor_x, altura, largura):
         cursor_y -= 1
     elif tecla == curses.KEY_LEFT and cursor_x > 2:
         cursor_x -= 2
-    elif tecla == curses.KEY_RIGHT and cursor_x < largura * 2:
+    elif tecla == curses.KEY_RIGHT and cursor_x < largura * 2 - 1:
         cursor_x += 2
     return cursor_y, cursor_x
 
