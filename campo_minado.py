@@ -1,5 +1,7 @@
 import campo
 import interface
+import cronometro
+import time
 import curses
 from curses import wrapper
 
@@ -26,19 +28,29 @@ def dados_por_dificuldade(opcao_escolhida):
         return 20, 24, 100
 
 def jogar(altura, largura, bombas, tela):
+    cron = cronometro.Cronometro()
+    dados = curses.newwin(1, 20, curses.LINES - 4, curses.COLS // 2 - 10)
+    #dados.nodelay(True)
+
     jogo = campo.Campo(altura, largura, bombas)
     casas_vazias = altura * largura - bombas
+
     janela_jogo = tela.criar_janela(altura, largura, jogo.campo_de_jogo)
+    janela_jogo.nodelay(True)
+
     cursor_y, cursor_x = 1, 1 #posicoes do "cursor" que vai facilitar o jogo
+
     tela.atualizar_janela(janela_jogo, cursor_y, cursor_x, jogo.campo_de_jogo)
 
 
     #fazer uma primeira jogada separado que cava 0 obrigatoriamente
     while True:
         tecla = janela_jogo.getch()
+
         if tecla == ord("q"):
             return #aqui vai pra segunda jogada sendo que era pra voltar pra o menu
         elif tecla == ord("c"):
+            cron.iniciar()
             jogo.criar_campos(cursor_y - 1, (cursor_x - 1) // 2)
             casas_cavadas = jogo.cavar(cursor_y - 1, (cursor_x - 1) // 2)
             casas_vazias -= casas_cavadas
@@ -48,23 +60,32 @@ def jogar(altura, largura, bombas, tela):
 
             tela.atualizar_janela(janela_jogo, cursor_y, cursor_x, jogo.campo_de_jogo)
 
+
     # esse loop aqui embaixo é pra as jogadas a partir da segunda
     while True:
         tela.atualizar_janela(janela_jogo, cursor_y, cursor_x, jogo.campo_de_jogo)
 
+        tempo = f"Tempo: {cron.tempo:02d}s"
+        dados.clear()
+        dados.addstr(0, 1, tempo)
+        dados.refresh()
+
         tecla = janela_jogo.getch()
 
         if tecla == ord("q"):
+            cron.parar
             break
 
         elif tecla == ord("c"):
             casas_cavadas = jogo.cavar(cursor_y - 1, (cursor_x - 1) // 2)
             if casas_cavadas == "gameover":
-                tela.game_derrota()
+                cron.parar()
+                tela.derrota()
                 break
 
             casas_vazias -= casas_cavadas
             if casas_vazias == 0:
+                cron.parar
                 tela.vitoria()
                 break
 
@@ -73,6 +94,7 @@ def jogar(altura, largura, bombas, tela):
 
         elif tecla in [curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT, curses.KEY_RIGHT]:
             cursor_y, cursor_x = movimentar_cursor(tecla, cursor_y, cursor_x, altura, largura)
+        time.sleep(0.1)
 
 
 #refazendo tudo:
