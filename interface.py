@@ -15,6 +15,10 @@ class Interface:
         self.verde_preto = curses.color_pair(4)
         curses.init_pair(5, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
         self.magenta_preto = curses.color_pair(5)
+        curses.init_pair(6, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+        self.amarelo_preto = curses.color_pair(6)
+        curses.init_pair(7, curses.COLOR_CYAN, curses.COLOR_BLACK)
+        self.ciano_preto = curses.color_pair(7)
 
     def menu(self, stdscr):
         altura_tela, largura_tela = curses.LINES, curses.COLS
@@ -167,7 +171,7 @@ class Interface:
 
             for i in range(tamanho):
                 b[i] = int((b[i] + b[i + 1] + b[i + largura] + b[i + largura + 1]) / 4)
-                color = (6 if b[i]>15 else (5 if b[i]>9 else (3 if b[i]>4 else 1)))
+                color = (7 if b[i]>15 else (6 if b[i]>9 else (3 if b[i]>4 else 1)))
 
                 if i < tamanho - 1:
                     y, x = int(i / largura), i % largura
