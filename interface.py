@@ -194,6 +194,8 @@ class Interface:
 
         self.stdscr.nodelay(False)
         self.stdscr.timeout(-1)
+        self.stdscr.clear()
+        self.stdscr.refresh()
 
     def vitoria(self, tempo):
         self.stdscr.clear()
