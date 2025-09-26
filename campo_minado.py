@@ -29,8 +29,12 @@ def dados_por_dificuldade(opcao_escolhida):
 
 def jogar(altura, largura, bombas, tela):
     cron = cronometro.Cronometro()
-    dados = curses.newwin(1, 20, curses.LINES - 4, curses.COLS // 2 - 10)
-    #dados.nodelay(True)
+    tempo = "Tempo: 00 s"
+    bombas_restantes = bombas
+    dados = tempo + f"  Bombas: {bombas_restantes}"
+    janela_dados = curses.newwin(1, 26, 4, curses.COLS // 2 - 13)
+    janela_dados.addstr(0, 1, dados)
+    janela_dados.refresh()
 
     jogo = campo.Campo(altura, largura, bombas)
     casas_vazias = altura * largura - bombas
@@ -65,10 +69,11 @@ def jogar(altura, largura, bombas, tela):
     while True:
         tela.atualizar_janela(janela_jogo, cursor_y, cursor_x, jogo.campo_de_jogo)
 
-        tempo = f"Tempo: {cron.tempo:02d}s"
-        dados.clear()
-        dados.addstr(0, 1, tempo)
-        dados.refresh()
+        tempo = f"Tempo: {cron.tempo:03d} s"
+        dados = tempo + f"  Bombas: {bombas_restantes}"
+        janela_dados.clear()
+        janela_dados.addstr(0, 1, dados)
+        janela_dados.refresh()
 
         tecla = janela_jogo.getch()
 
@@ -85,12 +90,12 @@ def jogar(altura, largura, bombas, tela):
 
             casas_vazias -= casas_cavadas
             if casas_vazias == 0:
-                cron.parar
-                tela.vitoria()
+                cron.parar()
+                tela.vitoria(tempo)
                 break
 
         elif tecla == ord("m"):
-            jogo.marcar_bomba(cursor_y - 1, (cursor_x - 1) // 2)
+            bombas_restantes += jogo.marcar_bomba(cursor_y - 1, (cursor_x - 1) // 2)
 
         elif tecla in [curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT, curses.KEY_RIGHT]:
             cursor_y, cursor_x = movimentar_cursor(tecla, cursor_y, cursor_x, altura, largura)
