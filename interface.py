@@ -18,7 +18,7 @@ class Interface:
         self.stdscr.clear()
         altura_tela, largura_tela = curses.LINES, curses.COLS
 
-        opcoes = ["Fácil", "Médio", "Díficil", "Ajuda e Créditos", "Sair"] # opções que eu quero que o menu tenha
+        opcoes = ["Fácil", "Médio", "Difícil", "Ajuda e Créditos", "Sair"] # opções que eu quero que o menu tenha
         opcao_escolhida = 0
 
         while True:
