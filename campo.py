@@ -112,7 +112,9 @@ class Campo:
         ):
         if self.campo_de_jogo[y][x] == "x":
             self.campo_de_jogo[y][x] = "o"
+            return 1
         elif self.campo_de_jogo[y][x] == "o":
             self.campo_de_jogo[y][x] = "x"
+            return -1
         else:
-            pass
+            return 0
