@@ -13,6 +13,8 @@ class Interface:
         self.vermelho_preto = curses.color_pair(3)
         curses.init_pair(4, curses.COLOR_GREEN, curses.COLOR_BLACK)
         self.verde_preto = curses.color_pair(4)
+        curses.init_pair(5, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+        self.magenta_preto = curses.color_pair(5)
 
     def menu(self, stdscr):
         altura_tela, largura_tela = curses.LINES, curses.COLS
@@ -37,7 +39,7 @@ class Interface:
                     janela_menu.addstr(y, x, opcoes[i])
                     janela_menu.attroff(curses.A_REVERSE)
                 else:
-                    janela_menu.addstr(y, x, opcoes[i]) 
+                    janela_menu.addstr(y, x, opcoes[i])
             self.stdscr.refresh()
             tecla_clicada = janela_menu.getch()
             janela_menu.refresh()
@@ -78,9 +80,12 @@ class Interface:
                 elif casa == "1":
                     janela.addstr(lin + 1, col * 2 + 1, " 1", self.azul_preto)
                 elif casa == "2":
-                    janela.addstr(lin + 1, col * 2 + 1, " 2", self.verde_preto) 
-                else:
+                    janela.addstr(lin + 1, col * 2 + 1, " 2", self.verde_preto)
+                elif casa == "3":
                     janela.addstr(lin + 1, col * 2 + 1, " " + casa, self.vermelho_preto)
+                else:
+                    janela.addstr(lin + 1, col * 2 + 1, " " + casa, self.magenta_preto)
+
 
         janela.addstr(cursor_y, cursor_x, "@@", curses.A_REVERSE)
         janela.refresh()
@@ -156,12 +161,13 @@ class Interface:
                     self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_derrota[lin])) // 2) + col, " ", curses.A_REVERSE)
                 else:
                     self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_derrota[lin])) // 2) + col, " ")
-                    rodape = "aperte qualquer tecla para voltar para o menu..."
-                    self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
+
+        rodape = "aperte qualquer tecla para voltar para o menu..."
+        self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
         self.stdscr.refresh()
         self.stdscr.getch()
-    
-    def vitoria(self):
+
+    def vitoria(self, tempo):
         self.stdscr.clear()
         m_vitoria = [
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -181,7 +187,10 @@ class Interface:
                     self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_vitoria[lin])) // 2) + col, " ", curses.A_REVERSE)
                 else:
                     self.stdscr.addstr((curses.LINES // 2) - 7 + lin, ((curses.COLS - len(m_vitoria[lin])) // 2) + col, " ")
-                    rodape = "aperte qualquer tecla para voltar para o menu..."
-                    self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
+
+        self.stdscr.addstr(curses.LINES // 2 + (len(m_vitoria) // 2) + 2, (curses.COLS - len(tempo)) // 2, tempo)
+
+        rodape = "aperte qualquer tecla para voltar para o menu..."
+        self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
         self.stdscr.refresh()
         self.stdscr.getch()
