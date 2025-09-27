@@ -146,6 +146,8 @@ class Interface:
 
         self.stdscr.refresh()
         self.stdscr.getch()
+        self.stdscr.clear()
+        self.stdscr.refresh()
 
 
     def derrota(self):
@@ -225,3 +227,6 @@ class Interface:
         self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
         self.stdscr.refresh()
         self.stdscr.getch()
+        self.stdscr.clear()
+        self.stdscr.refresh()
+
