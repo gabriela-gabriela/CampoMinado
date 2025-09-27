@@ -40,11 +40,12 @@ def jogar(altura, largura, bombas, tela):
     casas_vazias = altura * largura - bombas
 
     janela_jogo = tela.criar_janela(altura, largura, jogo.campo_de_jogo)
-    janela_jogo.nodelay(True)
+    janela_jogo.timeout(1000)
 
     cursor_y, cursor_x = 1, 1 #posicoes do "cursor" que vai facilitar o jogo
 
     tela.atualizar_janela(janela_jogo, cursor_y, cursor_x, jogo.campo_de_jogo)
+    curses.doupdate()
 
 
     #fazer uma primeira jogada separado que cava 0 obrigatoriamente
@@ -63,7 +64,7 @@ def jogar(altura, largura, bombas, tela):
             cursor_y, cursor_x = movimentar_cursor(tecla, cursor_y, cursor_x, altura, largura)
 
             tela.atualizar_janela(janela_jogo, cursor_y, cursor_x, jogo.campo_de_jogo)
-
+            curses.doupdate()
 
     # esse loop aqui embaixo é pra as jogadas a partir da segunda
     while True:
@@ -73,12 +74,14 @@ def jogar(altura, largura, bombas, tela):
         dados = tempo + f"  Bombas: {bombas_restantes}"
         janela_dados.clear()
         janela_dados.addstr(0, 1, dados)
-        janela_dados.refresh()
+        janela_dados.noutrefresh()
+
+        curses.doupdate()
 
         tecla = janela_jogo.getch()
 
         if tecla == ord("q"):
-            cron.parar
+            cron.parar()
             break
 
         elif tecla == ord("c"):
@@ -99,11 +102,11 @@ def jogar(altura, largura, bombas, tela):
 
         elif tecla in [curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT, curses.KEY_RIGHT]:
             cursor_y, cursor_x = movimentar_cursor(tecla, cursor_y, cursor_x, altura, largura)
-        time.sleep(0.1)
 
 
 #refazendo tudo:
 def main(stdscr):
+
     #tem q por uma verificao pra ver se o tamanho do terminal é grande o suficiente
     tela = interface.Interface(stdscr)
     curses.curs_set(0)
