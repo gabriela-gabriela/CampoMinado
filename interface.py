@@ -70,7 +70,7 @@ class Interface:
         return janela
 
     def atualizar_janela(self, janela, cursor_y, cursor_x, campo_de_jogo):
-        janela.clear()
+        #janela.clear()
         janela.border()
         for lin in range(len(campo_de_jogo)):
             for col in range(len(campo_de_jogo[lin])):
@@ -92,7 +92,8 @@ class Interface:
 
 
         janela.addstr(cursor_y, cursor_x, "@@", curses.A_REVERSE)
-        janela.refresh()
+        janela.noutrefresh()
+        #curses.doupdate()
 
     def ajuda_creditos(self):
         self.stdscr.clear()
