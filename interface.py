@@ -444,6 +444,23 @@ class Interface:
             [0,0,1,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,1,1,1,0,0,0,1,1,0,0,1,1,0,1,1,0,1,1,0,0,0,1,1]
         ]
 
+        balao = [
+                [0,0,0,2,2,2,0,0,0],
+                [0,2,2,1,2,2,2,2,0],
+                [2,2,1,2,2,2,2,2,2],
+                [2,2,2,2,2,2,2,2,2],
+                [2,2,2,2,2,2,2,2,2],
+                [0,2,2,2,2,2,2,2,0],
+                [0,0,2,2,2,2,2,0,0],
+                [0,0,0,2,2,2,0,0,0],
+                [0,0,0,0,1,0,0,0,0],
+                [0,0,0,0,1,0,0,0,0],
+                [0,0,0,0,0,1,0,0,0],
+                [0,0,0,0,0,0,1,1,0],
+                [0,0,0,0,0,0,0,0,1],
+                [0,0,0,0,0,0,0,0,1]
+                ]
+
         self.stdscr.clear()
         for lin in range(len(m_vitoria)):
             for col in range(len(m_vitoria[lin])):
@@ -460,6 +477,42 @@ class Interface:
                         (curses.LINES // 2) - 7 + lin,
                         ((curses.COLS - len(m_vitoria[lin])) // 2) + col,
                         " ",
+                    )
+
+        for lin in range(len(balao)):
+            for col in range(len(balao[lin])):
+                p = balao[lin][col]
+                if p == 2:
+                    self.stdscr.addstr(
+                        curses.LINES - len(balao) + lin,
+                        4 + col,
+                        " ",
+                        self.magenta_preto | curses.A_REVERSE,
+                    )
+                elif p == 1:
+                    self.stdscr.addstr(
+                        curses.LINES - len(balao) + lin,
+                        4 + col,
+                        " ",
+                        curses.A_REVERSE,
+                    )
+
+        for lin in range(len(balao)):
+            for col in range(len(balao[lin])):
+                p = balao[lin][col]
+                if p == 2:
+                    self.stdscr.addstr(
+                        curses.LINES - len(balao) + lin + 2,
+                        curses.COLS - len(balao[lin]) - 4 + col,
+                        " ",
+                        self.azul_preto | curses.A_REVERSE,
+                    )
+                elif p == 1:
+                    self.stdscr.addstr(
+                        curses.LINES - len(balao) + lin + 2,
+                        curses.COLS - len(balao[lin]) - 4 + col,
+                        " ",
+                        curses.A_REVERSE,
                     )
 
         self.stdscr.addstr(
