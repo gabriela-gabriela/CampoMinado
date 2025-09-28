@@ -204,7 +204,7 @@ class Interface:
             "professores",
             self.verde_preto | curses.A_BOLD,
         )
-        professores = ["Dalton Serey", "Jorge", "Wilkerson"]
+        professores = ["Dalton Serey", "Jorge Figueredo", "Wilkerson Andrade"]
         for i in range(len(professores)):
             self.stdscr.addstr(
                 curses.LINES // 2 - 5 + i, curses.COLS // 2 - 8, professores[i]
@@ -216,7 +216,7 @@ class Interface:
             "monitor",
             self.azul_preto | curses.A_BOLD,
         )
-        self.stdscr.addstr(curses.LINES // 2, curses.COLS // 2 - 8, "glima")
+        self.stdscr.addstr(curses.LINES // 2, curses.COLS // 2 - 8, "G.Lima")
 
         self.stdscr.addstr(
             curses.LINES // 2 + 2,
@@ -258,17 +258,17 @@ class Interface:
         )
         frases = [
             "Objetivo: revelar todos os espaços que não possuem",
-            "bombas",
+            "bombas.",
             "Sobre as casas:",
             "- casas vazias não possuem bombas (cada casa ocupa o",
             "espaco de dois caracteres no terminal;",
             "- casas com números indicam o número de bombas nas casas",
-            "adjacentes àquele número;",
+            "ajacentes àquele número;",
             "- casas vermelhas representam bombas que você marcou e",
             "não podem ser cavadas.",
             "Outras coisas importantes:",
             "- o tempo só começa após cavar a primeira casa (tente",
-            "conseguir o melhor tempo!);",
+            "conseguir o melhor tempo!)",
             "- cavar uma casa de número x - caso tenham x casas",
             "marcadas ao redor - cava as casas adjacentes não",
             "marcadas.",
@@ -461,6 +461,23 @@ class Interface:
                 [0,0,0,0,0,0,0,0,1]
                 ]
 
+        balao2 = [
+                [0,0,0,2,2,2,0,0,0],
+                [0,2,2,1,2,2,2,2,0],
+                [2,2,1,2,2,2,2,2,2],
+                [2,2,2,2,2,2,2,2,2],
+                [2,2,2,2,2,2,2,2,2],
+                [0,2,2,2,2,2,2,2,0],
+                [0,0,2,2,2,2,2,0,0],
+                [0,0,0,2,2,2,0,0,0],
+                [0,0,0,0,1,0,0,0,0],
+                [0,0,0,0,0,1,0,0,0],
+                [0,0,0,0,0,1,0,0,0],
+                [0,0,0,0,1,0,0,0,0],
+                [0,0,1,1,0,0,0,0,0],
+                [0,1,0,0,0,0,0,0,0]
+                ]
+
         self.stdscr.clear()
         for lin in range(len(m_vitoria)):
             for col in range(len(m_vitoria[lin])):
@@ -497,20 +514,20 @@ class Interface:
                         curses.A_REVERSE,
                     )
 
-        for lin in range(len(balao)):
-            for col in range(len(balao[lin])):
-                p = balao[lin][col]
+        for lin in range(len(balao2)):
+            for col in range(len(balao2[lin])):
+                p = balao2[lin][col]
                 if p == 2:
                     self.stdscr.addstr(
-                        curses.LINES - len(balao) + lin - 2,
-                        curses.COLS - len(balao[lin]) - 4 + col,
+                        curses.LINES - len(balao2) + lin - 2,
+                        curses.COLS - len(balao2[lin]) - 4 + col,
                         " ",
                         self.azul_preto | curses.A_REVERSE,
                     )
                 elif p == 1:
                     self.stdscr.addstr(
-                        curses.LINES - len(balao) + lin - 2,
-                        curses.COLS - len(balao[lin]) - 4 + col,
+                        curses.LINES - len(balao2) + lin - 2,
+                        curses.COLS - len(balao2[lin]) - 4 + col,
                         " ",
                         curses.A_REVERSE,
                     )
