@@ -1,6 +1,6 @@
 # Campo Minado em Python(Terminal)</h1>
 
-Um projeto acadêmico que recria o clássico jogo Campo Minado para ser jogado diretamente no terminal, utilizando a biblioteca `Curses` do Python para a interface gráfica.
+Um projeto acadêmico que recria o clássico jogo Campo Minado para ser jogado diretamente no terminal, utilizando a biblioteca `curses` do Python para a interface gráfica.
 
 ## Autoras
 
@@ -26,7 +26,7 @@ Desenvolvido por **Gabriela Ramalho da Silva** e **Lara Giovanna de Moura Soares
 
 - Python 3: linguagem principal do projeto.
 
-- Biblioteca `Curses`: para toda a manipulação da interface no terminal (janelas, cores, entrada de teclado).
+- Biblioteca `curses`: para toda a manipulação da interface no terminal (janelas, cores, entrada de teclado).
 
 - Biblioteca threading: utilizada no arquivo **cronometro.py** para que o tempo passe em segundo plano sem travar o jogo.
 
