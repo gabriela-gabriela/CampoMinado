@@ -27,12 +27,12 @@ def dados_por_dificuldade(opcao_escolhida):
     elif opcao_escolhida == "Difícil":
         return 20, 24, 100
 
-def jogar(altura, largura, bombas, tela):
+def jogar(stdscr, altura, largura, bombas, tela):
     cron = cronometro.Cronometro()
     tempo = "Tempo: 00 s"
     bombas_restantes = bombas
     dados = tempo + f"  Bombas: {bombas_restantes}"
-    janela_dados = curses.newwin(1, 26, 4, curses.COLS // 2 - 13)
+    janela_dados = curses.newwin(1, 27, (curses.LINES - altura - 4) // 2, curses.COLS // 2 - 13)
     janela_dados.addstr(0, 1, dados)
     janela_dados.refresh()
 
@@ -53,6 +53,8 @@ def jogar(altura, largura, bombas, tela):
         tecla = janela_jogo.getch()
 
         if tecla == ord("q"):
+            stdscr.clear()
+            stdscr.refresh()
             return #aqui vai pra segunda jogada sendo que era pra voltar pra o menu
         elif tecla == ord("c"):
             cron.iniciar()
@@ -72,7 +74,7 @@ def jogar(altura, largura, bombas, tela):
 
         tempo = f"Tempo: {cron.tempo:03d} s"
         dados = tempo + f"  Bombas: {bombas_restantes}"
-        janela_dados.clear()
+        #janela_dados.clear()
         janela_dados.addstr(0, 1, dados)
         janela_dados.noutrefresh()
 
@@ -82,6 +84,8 @@ def jogar(altura, largura, bombas, tela):
 
         if tecla == ord("q"):
             cron.parar()
+            stdscr.clear()
+            stdscr.refresh()
             break
 
         elif tecla == ord("c"):
@@ -117,18 +121,26 @@ def main(stdscr):
 
     while True:
         # mostra o menu pra o jogador
-        opcao_escolhida = tela.menu(stdscr)
-        if opcao_escolhida == "Ajuda e Créditos":
-            tela.ajuda_creditos()
+        opcao_escolhida = tela.menu()
+        if opcao_escolhida == "Jogar":
+            dificuldade = tela.menu_dificuldades()
+            if dificuldade == "Voltar ao menu":
+                continue
+            else:
+                altura, largura, bombas = dados_por_dificuldade(dificuldade)
+
+        elif opcao_escolhida == "Créditos":
+            tela.creditos()
+            continue
+
+        elif opcao_escolhida == "Ajuda":
+            tela.ajuda()
             continue
 
         elif opcao_escolhida == "Sair":
             break
 
-        else:
-            altura, largura, bombas = dados_por_dificuldade(opcao_escolhida)
-
-        jogar(altura, largura, bombas, tela)
+        jogar(stdscr, altura, largura, bombas, tela)
 
 
 curses.wrapper(main)
