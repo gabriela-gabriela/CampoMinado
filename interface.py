@@ -502,14 +502,14 @@ class Interface:
                 p = balao[lin][col]
                 if p == 2:
                     self.stdscr.addstr(
-                        curses.LINES - len(balao) + lin + 2,
+                        curses.LINES - len(balao) + lin - 2,
                         curses.COLS - len(balao[lin]) - 4 + col,
                         " ",
                         self.azul_preto | curses.A_REVERSE,
                     )
                 elif p == 1:
                     self.stdscr.addstr(
-                        curses.LINES - len(balao) + lin + 2,
+                        curses.LINES - len(balao) + lin - 2,
                         curses.COLS - len(balao[lin]) - 4 + col,
                         " ",
                         curses.A_REVERSE,
