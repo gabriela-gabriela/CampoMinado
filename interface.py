@@ -240,7 +240,7 @@ class Interface:
             curses.LINES // 2 + 7, curses.COLS // 2 - 8, "Chris Simpkins"
         )
 
-        rodape = "aperte qualquer tecla para voltar ao menu"
+        rodape = "aperte qualquer tecla para voltar ao menu..."
         self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
         self.stdscr.refresh()
         self.stdscr.getch()
@@ -260,19 +260,19 @@ class Interface:
             "Objetivo: revelar todos os espaços que não possuem",
             "bombas",
             "Sobre as casas:",
-            "casas vazias não possuem bombas (cada casa ocupa o",
+            "- casas vazias não possuem bombas (cada casa ocupa o",
             "espaco de dois caracteres no terminal;",
-            "casas com números indicam o número de bombas nas casas",
-            "ao redor;",
-            "casas vermelhas representam bombas que você marcou e",
+            "- casas com números indicam o número de bombas nas casas",
+            "adjacentes àquele número;",
+            "- casas vermelhas representam bombas que você marcou e",
             "não podem ser cavadas.",
             "Outras coisas importantes:",
-            "o tempo só começa após cavar a primeira casa (tente",
-            "conseguir o melhor tempo!)",
-            "cavar uma casa de número x - caso tenham x casas",
+            "- o tempo só começa após cavar a primeira casa (tente",
+            "conseguir o melhor tempo!);",
+            "- cavar uma casa de número x - caso tenham x casas",
             "marcadas ao redor - cava as casas adjacentes não",
-            "marcadas",
-            "agora que você sabe o básico, pode começar a diversão!",
+            "marcadas.",
+            "Agora que você sabe o básico, pode começar a diversão!",
             "mas sempre lembre, seja inteligente e faça um plano!!!",
         ]
 
@@ -303,7 +303,7 @@ class Interface:
             self.vermelho_preto | curses.A_BOLD,
         )
 
-        rodape = "aperte qualquer tecla pra voltar ao menu"
+        rodape = "aperte qualquer tecla pra voltar ao menu..."
         self.stdscr.addstr(
             curses.LINES // 2 + 11, (curses.COLS - len(rodape)) // 2, rodape
         )
