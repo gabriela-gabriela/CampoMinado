@@ -37,7 +37,7 @@ def jogar(stdscr, altura, largura, bombas, tela):
     tempo = "Tempo: 00 s"
 
     bombas_restantes = bombas
-    dados = tempo + f"  Bombas: {bombas_restantes}"
+    dados = tempo + f"  Bombas: {bombas_restantes:3d}"
     janela_dados = curses.newwin(
         1, 27, (curses.LINES - altura - 4) // 2, curses.COLS // 2 - 13
     )
@@ -90,8 +90,8 @@ def jogar(stdscr, altura, largura, bombas, tela):
         # loop para as jogadas posteriores a primeira, o cronometro é iniciado e agora é permitido marcar bombas
         tela.atualizar_janela(janela_jogo, cursor_y, cursor_x, jogo.campo_de_jogo)
 
-        tempo = f"Tempo: {cron.tempo:03d} s"
-        dados = tempo + f"  Bombas: {bombas_restantes}"
+        tempo = f"Tempo: {cron.tempo:3d} s"
+        dados = tempo + f"  Bombas: {bombas_restantes:3d}"
         janela_dados.addstr(0, 1, dados)
         janela_dados.noutrefresh()
 
@@ -134,10 +134,10 @@ def jogar(stdscr, altura, largura, bombas, tela):
 
 def main(stdscr):
     # função principal do jogo, que agrega todas as outras
-    if curses.LINES < 32 or curses.COLS < 64:
-        print(
-            f"Infelizmente o terminal não tem tamanho suficiente para rodar o nosso jogo ):\nTente novamente em um terminal maior para conseguir jogar."
-        )
+    if curses.LINES < 30 or curses.COLS < 64:
+        stdscr.addstr(1, 1, f"\nInfelizmente o terminal não tem tamanho suficiente para rodar o nosso jogo ):\nAperte qualquer tecla para sair dessa tela e tente novamente em um terminal maior para conseguir jogar.")
+        stdscr.refresh()
+        stdscr.getch()
         return
 
     tela = interface.Interface(stdscr)
