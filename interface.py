@@ -19,15 +19,20 @@ class Interface:
         self.amarelo_preto = curses.color_pair(6)
         curses.init_pair(7, curses.COLOR_CYAN, curses.COLOR_BLACK)
         self.ciano_preto = curses.color_pair(7)
+        curses.init_pair(8, curses.COLOR_BLACK, curses.COLOR_RED)
+        self.preto_vermelho = curses.color_pair(8)
+        curses.init_pair(9, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        self.preto_branco = curses.color_pair(9)
 
-    def menu(self, stdscr):
+    def menu(self):
+        self.stdscr.clear()
         altura_tela, largura_tela = curses.LINES, curses.COLS
 
-        opcoes = ["Fácil", "Médio", "Difícil", "Ajuda e Créditos", "Sair"] # opções que eu quero que o menu tenha
+        opcoes = ["Jogar", "Ajuda", "Créditos", "Sair"] # opções que eu quero que o menu tenha
         opcao_escolhida = 0
 
         altura_janela = 24
-        largura_janela = 54
+        largura_janela = 32
         janela_menu = curses.newwin(altura_janela, largura_janela, altura_tela//2 - altura_janela//2, largura_tela//2 - largura_janela//2)
         janela_menu.keypad(True)
 
@@ -57,6 +62,46 @@ class Interface:
                 self.stdscr.clear()
                 self.stdscr.refresh()
                 return opcoes[opcao_escolhida]
+
+    def menu_dificuldades(self):
+        altura_tela, largura_tela = curses.LINES, curses.COLS
+
+        dificuldades = ["Fácil", "Médio", "Difícil", "Voltar ao menu"]
+
+        opcao_escolhida = 0
+
+        altura_janela = 16
+        largura_janela = 24
+        janela_dificuldades = curses.newwin(altura_janela, largura_janela, altura_tela//2 - altura_janela//2, largura_tela//2 - largura_janela//2)
+        janela_dificuldades.keypad(True)
+
+        while True:
+            janela_dificuldades.clear()
+            janela_dificuldades.border()
+            janela_dificuldades.addstr(3, largura_janela//2 - 6, "CAMPO MINADO", curses.A_BOLD|self.azul_preto)
+            for i in range(len(dificuldades)):
+                x = (largura_janela // 2) - len(dificuldades[i]) // 2
+                y = (altura_janela // 2) - (len(dificuldades) // 2) + i * 2
+                if i == opcao_escolhida:
+                    janela_dificuldades.attron(curses.A_REVERSE)
+                    janela_dificuldades.addstr(y, x, dificuldades[i])
+                    janela_dificuldades.attroff(curses.A_REVERSE)
+                else:
+                    janela_dificuldades.addstr(y, x, dificuldades[i])
+            self.stdscr.refresh()
+            tecla_clicada = janela_dificuldades.getch()
+            janela_dificuldades.refresh()
+
+            if tecla_clicada == curses.KEY_DOWN and opcao_escolhida < len(dificuldades) - 1:
+                opcao_escolhida += 1
+            elif tecla_clicada == curses.KEY_UP and opcao_escolhida > 0:
+                opcao_escolhida -= 1
+
+            elif tecla_clicada in [curses.KEY_ENTER, 10, 13]:
+                self.stdscr.clear()
+                self.stdscr.refresh()
+                return dificuldades[opcao_escolhida]
+
 
     def criar_janela(self, altura, largura, campo_de_jogo):
         # aumentando um pouco a altura e largura baseado no campo pra poder caber dentro da borda
@@ -90,18 +135,58 @@ class Interface:
                 else:
                     janela.addstr(lin + 1, col * 2 + 1, " " + casa, self.magenta_preto)
 
+            casa = campo_de_jogo[cursor_y - 1][(cursor_x - 1) // 2]
+            if casa == None:
+                casa = "o"
+            if casa == " ":
+                cursor = ["  ", self.branco_preto]
+            elif casa == "o":
+                cursor = ["  ", self.preto_branco]
+            elif casa == "x":
+                cursor = [" X", self.preto_vermelho]
+            elif casa == "1":
+                cursor = [" 1", self.azul_preto]
+            elif casa == "2":
+                cursor = [" 2", self.verde_preto]
+            elif casa == "3":
+                cursor = [" 3", self.vermelho_preto]
+            else:
+                cursor = [" " + casa, self.magenta_preto]
 
-        janela.addstr(cursor_y, cursor_x, "@@", curses.A_REVERSE)
+
+        janela.addstr(cursor_y, cursor_x, cursor[0], cursor[1] | curses.A_REVERSE)
         janela.noutrefresh()
         #curses.doupdate()
 
-    def ajuda_creditos(self):
+
+    def creditos(self):
         self.stdscr.clear()
-        frase = "parte em andamento, feito por gabriela e lara"
-        self.stdscr.addstr(curses.LINES // 2, (curses.COLS - len(frase)) // 2, frase)
+
+        self.stdscr.addstr(curses.LINES // 2 - 8, curses.COLS // 2 - 4, "CRÉDITOS", self.amarelo_preto | curses.A_BOLD)
+
+        self.stdscr.addstr(curses.LINES // 2 - 6, curses.COLS // 2 - 6, "professores", self.verde_preto | curses.A_BOLD)
+        professores = ["Dalton Serey", "Jorge", "Wilkerson"]
+        for i in range(len(professores)):
+            self.stdscr.addstr(curses.LINES // 2 - 5 + i, curses.COLS // 2 - 8, professores[i])
+
+        self.stdscr.addstr(curses.LINES // 2 - 1, curses.COLS // 2 - 4, "monitor", self.azul_preto | curses.A_BOLD)
+        self.stdscr.addstr(curses.LINES // 2, curses.COLS // 2 - 8, "glima")
+
+        self.stdscr.addstr(curses.LINES // 2 + 2, curses.COLS // 2 - 7, "programadoras", self.magenta_preto | curses.A_BOLD)
+        programadoras = ["Lara Soares", "Gabriela Ramalho"]
+        for i in range(len(programadoras)):
+                self.stdscr.addstr(curses.LINES // 2 + 3 + i, curses.COLS // 2 - 8, programadoras[i])
+
+        self.stdscr.addstr(curses.LINES // 2 + 6, curses.COLS // 2 - 8, "Animação do fogo", self.vermelho_preto | curses.A_BOLD)
+        self.stdscr.addstr(curses.LINES // 2 + 7, curses.COLS // 2 - 8, "Chris Simpkins")
+
+        rodape = "aperte qualquer tecla para voltar ao menu"
+        self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
         self.stdscr.refresh()
         self.stdscr.getch()
-        return
+        self.stdscr.clear()
+        self.stdscr.refresh()
+
 
     def animacao_inicio(self):
         # vou fazer uma matriz escrito campo minado e imprimir pra ficar como se fossem as letras so que grandes
@@ -225,8 +310,8 @@ class Interface:
 
         rodape = "aperte qualquer tecla para voltar para o menu..."
         self.stdscr.addstr(curses.LINES - 3, (curses.COLS - len(rodape)) // 2, rodape)
+        
         self.stdscr.refresh()
         self.stdscr.getch()
         self.stdscr.clear()
         self.stdscr.refresh()
-
