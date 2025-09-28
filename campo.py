@@ -8,21 +8,28 @@ class Campo:
         self.n_bombas = n_bombas
         self.campo_minado = [[None for col in range(largura)] for lin in range(altura)]
         self.campo_de_jogo = [["o" for col in range(largura)] for lin in range(altura)]
-        self.matriz_verificacao = [[True for col in range(largura)] for lin in range(altura)] #matriz pra evitar que vire um loop infinito
-        self.matriz_foi_cavada = [[False for col in range(largura)] for lin in range(altura)]
+        self.matriz_verificacao = [
+            [True for col in range(largura)] for lin in range(altura)
+        ]  # matriz pra evitar que vire um loop infinito
+        self.matriz_foi_cavada = [
+            [False for col in range(largura)] for lin in range(altura)
+        ]
 
     def plantar_bombas(self, y, x):
+        # essa função vai posicionar as bombas em posicoes aleatórias do campo após a primeira jogada
         bombas_plantadas = 0
         while bombas_plantadas < self.n_bombas:
             locx = random.randint(0, self.largura - 1)
             locy = random.randint(0, self.altura - 1)
 
-            if self.campo_minado[locy][locx] == None and (locx, locy) not in [(x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)]: # esse list comprehension cria uma lista com os vizinhos de x, y
+            if self.campo_minado[locy][locx] == None and (locx, locy) not in [
+                (x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+            ]:  # esse list comprehension cria uma lista com os vizinhos de x, y
                 self.campo_minado[locy][locx] = "*"
                 bombas_plantadas += 1
 
     def contar_bombas_vizinhas(self, y, x, bomba=None):
-        # se a bomba for None ele vai contar as bombas reais ao redor, se for x, ele vai contar as bombas marcadas ao redor
+        # conta as bombas adjacentes, se a bomba for None ele vai contar as bombas reais ao redor, se for x, ele vai contar as bombas marcadas ao redor
         campo = self.campo_de_jogo
         if bomba == None:
             bomba = "*"
@@ -46,14 +53,16 @@ class Campo:
                     )
 
     def criar_campos(self, y, x):
+        # essa funçao une as outras funções para criar o campo
         self.plantar_bombas(y, x)
         self.numerar_bombas_vizinhas()
 
     def cavar(self, y, x):
-        # essa funcao aqui vai retornar o numero de casas cavadas ou "gameover" caso uma bomba seja cavada
+        # essa funcao cava e retorna o numero de casas cavadas ou "gameover" - caso uma bomba seja cavada
         cavadas = 0
         if self.matriz_foi_cavada[y][x]:
-            cavadas = self.cavar_por_numero(y, x, cavadas)
+            if self.campo_de_jogo[y][x] != " ":
+                cavadas = self.cavar_por_numero(y, x, cavadas)
 
         else:
             cavadas = self.cavar_nao_cavadas(y, x, cavadas)
@@ -61,10 +70,11 @@ class Campo:
         return cavadas
 
     def cavar_nao_cavadas(self, y, x, cavadas):
+        # cava as casas que ainda não foram cavadas, baseando-se na matriz_foi_cavada
         if self.matriz_foi_cavada[y][x]:
             return 0
 
-        if self.campo_de_jogo[y][x] == "x": # vc fica impedido de cavar uma loc marcada
+        if self.campo_de_jogo[y][x] == "x":  # vc fica impedido de cavar uma loc marcada
             return 0
 
         if self.campo_minado[y][x] == "*":
@@ -88,11 +98,12 @@ class Campo:
         return cavadas
 
     def cavar_por_numero(self, y, x, cavadas):
+        # essa função cava em casos onde a casa já foi cavada, mas apresenta um número que é igual ao número de bombas marcadas ao redor
         if (
             self.campo_de_jogo[y][x].isdigit()
             and 0 < int(self.campo_de_jogo[y][x]) < 9
             and self.matriz_verificacao[y][x]
-            ):
+        ):
             bombas_marcadas_ao_redor = self.contar_bombas_vizinhas(y, x, "x")
             if int(self.campo_de_jogo[y][x]) == bombas_marcadas_ao_redor:
                 self.matriz_verificacao[y][x] = False
@@ -102,14 +113,12 @@ class Campo:
                             if 0 <= col < self.largura:
                                 resultado = self.cavar_nao_cavadas(lin, col, 0)
                                 if resultado == "gameover":
-                                    return "gameover" #se eu colocar a funcao de game over aqui ou criar um novo arquivo pra ela eu acho q fica melhor
+                                    return "gameover"  # se eu colocar a funcao de game over aqui ou criar um novo arquivo pra ela eu acho q fica melhor
                                 cavadas += resultado
             return cavadas
 
-
-    def marcar_bomba(
-        self, y, x
-        ):
+    def marcar_bomba(self, y, x):
+        # essa função marca as bombas, facilitando o raciocínio do jogador, e retorna a quantidade de casas marcadas
         if self.campo_de_jogo[y][x] == "x":
             self.campo_de_jogo[y][x] = "o"
             return 1
