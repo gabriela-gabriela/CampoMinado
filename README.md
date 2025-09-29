@@ -40,6 +40,9 @@ Para rodar este projeto, você precisará de:
 
 - A biblioteca ncurses (geralmente já vem instalada na maioria das distribuições Linux, como o Ubuntu).
 
+Você pode baixar o programa na sua maquina por meio dessa versão no github:
+https://github.com/lgiovannadms/campo-minado-terminal
+
 ## Estrutura do Projeto
 
 O projeto é dividido em quatro arquivos principais:
